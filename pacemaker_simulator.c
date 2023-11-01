@@ -24,8 +24,21 @@
 
 // 2. Global Declarations Section
 void port_e_initialization(void);
+void set_ventricular_trigger(void);
+void clear_ventricular_trigger(void);
 
 // 3. Subroutines Section
+int main(void){
+	// Setup
+	port_e_initialization();
+	
+	// Loop
+	while(1){
+		set_ventricular_trigger();
+		clear_ventricular_trigger();
+	}
+}// end main()
+
 void port_e_initialization(void){
 	unsigned long volatile delay; // delay for 3-5 bus cycles for clock to stabilize
 	SYSCTL_RCGC2_R |= 0x10;
@@ -36,4 +49,12 @@ void port_e_initialization(void){
 	GPIO_PORTE_DIR_R &= ~0x01;
 	GPIO_PORTE_AFSEL_R &= ~0x07;
 	GPIO_PORTE_DEN_R |= 0x07;
-} // end portE_initialization
+} // end port_e_initialization
+
+void set_ventricular_trigger(void){
+	GPIO_PORTE_DATA_R |= 0x02;
+}
+
+void clear_ventricular_trigger(void){
+	GPIO_PORTE_DATA_R &= ~0x02;
+}
