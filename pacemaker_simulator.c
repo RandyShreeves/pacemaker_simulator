@@ -30,6 +30,8 @@ void set_ready_signal(void);
 void clear_ready_signal(void);
 void sys_tick_initialization(void);
 void delay_1ms(unsigned long msec);
+void wait_for_atrial_sensor_low(void);
+void wait_for_atrial_sensor_high(void);
 
 // 3. Subroutines Section
 int main(void){
@@ -39,9 +41,10 @@ int main(void){
 	// Loop
 	while(1){
 		set_ready_signal();
-		delay_1ms(250);
+		wait_for_atrial_sensor_high();
 		clear_ready_signal();
-		delay_1ms(10);
+		delay_1ms(10);	// delay 10ms to account for possible button bounce
+		wait_for_atrial_sensor_low();
 		delay_1ms(250);
 		set_ventricular_trigger();
 		delay_1ms(250);
@@ -94,3 +97,16 @@ void delay_1ms(unsigned long msec){
 		n--;
 	}// end outer while loop
 }// end delay_1ms()
+
+void wait_for_atrial_sensor_low(void){
+	while((GPIO_PORTE_DATA_R&0x01) == 0x01){
+		// do nothing
+	}
+	return;
+}
+void wait_for_atrial_sensor_high(void){
+	while((GPIO_PORTE_DATA_R&0x01) == 0x00){
+		// do nothing
+	}
+	return;
+}
