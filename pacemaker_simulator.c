@@ -23,5 +23,17 @@
 #define NVIC_ST_CURRENT_R (*((volatile unsigned long *)0xE000E018))
 
 // 2. Global Declarations Section
+void port_e_initialization(void);
 
 // 3. Subroutines Section
+void port_e_initialization(void){
+	unsigned long volatile delay; // delay for 3-5 bus cycles for clock to stabilize
+	SYSCTL_RCGC2_R |= 0x10;
+	delay = SYSCTL_RCGC2_R;
+	GPIO_PORTE_AMSEL_R &= ~0x07;
+  GPIO_PORTE_PCTL_R &= ~0x000000FF;
+	GPIO_PORTE_DIR_R |= 0x06;
+	GPIO_PORTE_DIR_R &= ~0x01;
+	GPIO_PORTE_AFSEL_R &= ~0x07;
+	GPIO_PORTE_DEN_R |= 0x07;
+} // end portE_initialization
