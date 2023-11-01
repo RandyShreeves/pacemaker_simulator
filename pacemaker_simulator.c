@@ -26,6 +26,8 @@
 void port_e_initialization(void);
 void set_ventricular_trigger(void);
 void clear_ventricular_trigger(void);
+void set_ready_signal(void);
+void clear_ready_signal(void);
 
 // 3. Subroutines Section
 int main(void){
@@ -34,6 +36,8 @@ int main(void){
 	
 	// Loop
 	while(1){
+		set_ready_signal();
+		clear_ready_signal();
 		set_ventricular_trigger();
 		clear_ventricular_trigger();
 	}
@@ -57,4 +61,11 @@ void set_ventricular_trigger(void){
 
 void clear_ventricular_trigger(void){
 	GPIO_PORTE_DATA_R &= ~0x02;
+}
+
+void set_ready_signal(void){
+	GPIO_PORTE_DATA_R |= 0x04;
+}
+void clear_ready_signal(void){
+	GPIO_PORTE_DATA_R &= ~0x04;
 }
