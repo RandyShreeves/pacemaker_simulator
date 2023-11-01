@@ -28,6 +28,8 @@ void set_ventricular_trigger(void);
 void clear_ventricular_trigger(void);
 void set_ready_signal(void);
 void clear_ready_signal(void);
+void sys_tick_initialization(void);
+void delay_1ms(unsigned long msec);
 
 // 3. Subroutines Section
 int main(void){
@@ -37,8 +39,12 @@ int main(void){
 	// Loop
 	while(1){
 		set_ready_signal();
+		delay_1ms(250);
 		clear_ready_signal();
+		delay_1ms(10);
+		delay_1ms(250);
 		set_ventricular_trigger();
+		delay_1ms(250);
 		clear_ventricular_trigger();
 	}
 }// end main()
@@ -69,3 +75,22 @@ void set_ready_signal(void){
 void clear_ready_signal(void){
 	GPIO_PORTE_DATA_R &= ~0x04;
 }
+
+void sys_tick_initialization(void){
+	NVIC_ST_CTRL_R = 0;
+	NVIC_ST_RELOAD_R = 15999;
+	NVIC_ST_CURRENT_R = 0;
+	NVIC_ST_CTRL_R = 0x00000005;
+}//end sys_tick_initialization
+
+void delay_1ms(unsigned long msec){
+	unsigned long n = msec;
+	while (n > 0){
+		sys_tick_initialization();
+		while((NVIC_ST_CTRL_R&0x00010000) == 0) {
+			// wait for count flag to be set
+		}// end inner while loop
+		NVIC_ST_CTRL_R = 0;
+		n--;
+	}// end outer while loop
+}// end delay_1ms()

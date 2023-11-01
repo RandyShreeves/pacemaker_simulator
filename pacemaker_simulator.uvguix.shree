@@ -3607,8 +3607,8 @@
       <Doc>
         <Name>.\pacemaker_simulator.c</Name>
         <ColumnNumber>25</ColumnNumber>
-        <TopLine>29</TopLine>
-        <CurrentLine>40</CurrentLine>
+        <TopLine>22</TopLine>
+        <CurrentLine>43</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
